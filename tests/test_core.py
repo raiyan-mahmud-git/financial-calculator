@@ -36,9 +36,9 @@ class TestCompoundInterest:
     def test_compound_interest_annual(self):
         # 1000 at 5% for 10 years compounded annually: 1000 * (1.05)^10
         expected = 1000.0 * (1.05**10)
-        assert compound_interest(
-            1000.0, 0.05, 10, compounds_per_year=1
-        ) == pytest.approx(expected, rel=1e-9)
+        assert compound_interest(1000.0, 0.05, 10, compounds_per_year=1) == pytest.approx(
+            expected, rel=1e-9
+        )
 
     def test_compound_interest_zero_rate(self):
         assert compound_interest(1500.0, 0.0, 10, compounds_per_year=12) == 1500.0
@@ -51,9 +51,7 @@ class TestCompoundInterest:
             compound_interest(-100.0, 0.05, 5)
         with pytest.raises(InvalidInputError, match="Years cannot be negative"):
             compound_interest(100.0, 0.05, -1)
-        with pytest.raises(
-            InvalidInputError, match="Compounds per year must be at least 1"
-        ):
+        with pytest.raises(InvalidInputError, match="Compounds per year must be at least 1"):
             compound_interest(100.0, 0.05, 5, compounds_per_year=0)
 
 
@@ -64,9 +62,7 @@ class TestContinuousGrowth:
         # 1000 * e^(0.05 * 10) = 1000 * e^0.5
         expected = 1000.0 * math.exp(0.5)
         assert continuous_growth(1000.0, 0.05, 10) == pytest.approx(expected, rel=1e-9)
-        assert continuous_growth(1000.0, 0.05, 10) == pytest.approx(
-            1648.721271, abs=1e-4
-        )
+        assert continuous_growth(1000.0, 0.05, 10) == pytest.approx(1648.721271, abs=1e-4)
 
     def test_continuous_growth_zero_rate(self):
         assert continuous_growth(2000.0, 0.0, 5) == 2000.0
@@ -87,9 +83,7 @@ class TestPercentChanges:
         assert percent_increase(100.0, 0.0, 5) == pytest.approx(100.0)
 
     def test_percent_increase_invalid(self):
-        with pytest.raises(
-            InvalidInputError, match="Initial amount cannot be negative"
-        ):
+        with pytest.raises(InvalidInputError, match="Initial amount cannot be negative"):
             percent_increase(-10.0, 0.05, 1)
         with pytest.raises(InvalidInputError, match="Rate cannot be less than -100%"):
             percent_increase(10.0, -1.2, 1)
@@ -102,13 +96,9 @@ class TestPercentChanges:
         assert percent_decrease(100.0, 0.0, 5) == pytest.approx(100.0)
 
     def test_percent_decrease_invalid(self):
-        with pytest.raises(
-            InvalidInputError, match="Decay rate must be between 0.0 and 1.0"
-        ):
+        with pytest.raises(InvalidInputError, match="Decay rate must be between 0.0 and 1.0"):
             percent_decrease(100.0, 1.5, 2)
-        with pytest.raises(
-            InvalidInputError, match="Decay rate must be between 0.0 and 1.0"
-        ):
+        with pytest.raises(InvalidInputError, match="Decay rate must be between 0.0 and 1.0"):
             percent_decrease(100.0, -0.1, 2)
 
 
@@ -118,33 +108,23 @@ class TestAnnuityFutureValue:
     def test_hand_verified_notebook_annuity(self):
         # From the Colab notebook: payment 300, rate 0.10, 3 years, monthly compounding
         # Expected: 12534.546327077787
-        res = annuity_future_value(
-            300.0, 0.10, 3, compounds_per_year=12, annuity_due=False
-        )
+        res = annuity_future_value(300.0, 0.10, 3, compounds_per_year=12, annuity_due=False)
         assert res == pytest.approx(12534.546327077787, rel=1e-9)
 
     def test_annuity_due_factor(self):
         # Annuity due receives 1 additional compounding period of interest
-        ord_fv = annuity_future_value(
-            300.0, 0.10, 3, compounds_per_year=12, annuity_due=False
-        )
-        due_fv = annuity_future_value(
-            300.0, 0.10, 3, compounds_per_year=12, annuity_due=True
-        )
+        ord_fv = annuity_future_value(300.0, 0.10, 3, compounds_per_year=12, annuity_due=False)
+        due_fv = annuity_future_value(300.0, 0.10, 3, compounds_per_year=12, annuity_due=True)
         assert due_fv == pytest.approx(ord_fv * (1.0 + 0.10 / 12), rel=1e-9)
 
     def test_continuous_annuity(self):
         # Continuous cash flow of 300/month = 3600/year at 10% for 3 years
         # 3600 * (e^(0.3) - 1) / 0.10
         expected = 3600.0 * (math.exp(0.3) - 1.0) / 0.10
-        res = annuity_future_value(
-            300.0, 0.10, 3, compounds_per_year=12, continuous=True
-        )
+        res = annuity_future_value(300.0, 0.10, 3, compounds_per_year=12, continuous=True)
         assert res == pytest.approx(expected, rel=1e-9)
         # Continuous compounding produces slightly more than monthly discrete compounding
-        ord_fv = annuity_future_value(
-            300.0, 0.10, 3, compounds_per_year=12, continuous=False
-        )
+        ord_fv = annuity_future_value(300.0, 0.10, 3, compounds_per_year=12, continuous=False)
         assert res > ord_fv
 
     def test_annuity_zero_rate(self):
@@ -156,9 +136,7 @@ class TestAnnuityFutureValue:
         )
 
     def test_annuity_invalid(self):
-        with pytest.raises(
-            InvalidInputError, match="Payment amount cannot be negative"
-        ):
+        with pytest.raises(InvalidInputError, match="Payment amount cannot be negative"):
             annuity_future_value(-50.0, 0.05, 5)
         with pytest.raises(InvalidInputError, match="Years cannot be negative"):
             annuity_future_value(50.0, 0.05, -5)
@@ -205,9 +183,7 @@ class TestRetirementProjection:
 
     def test_annual_contribution_increase(self):
         # 5% annual raise in contributions increases total deposited
-        base = retirement_projection(
-            monthly_contribution=500, annual_rate=0.05, years=5
-        )
+        base = retirement_projection(monthly_contribution=500, annual_rate=0.05, years=5)
         elevated = retirement_projection(
             monthly_contribution=500,
             annual_rate=0.05,
@@ -218,13 +194,9 @@ class TestRetirementProjection:
         assert elevated.final_nominal_balance > base.final_nominal_balance
 
     def test_retirement_invalid_inputs(self):
-        with pytest.raises(
-            InvalidInputError, match="Starting balance cannot be negative"
-        ):
+        with pytest.raises(InvalidInputError, match="Starting balance cannot be negative"):
             retirement_projection(starting_balance=-10)
-        with pytest.raises(
-            InvalidInputError, match="Monthly contribution cannot be negative"
-        ):
+        with pytest.raises(InvalidInputError, match="Monthly contribution cannot be negative"):
             retirement_projection(monthly_contribution=-5)
         with pytest.raises(InvalidInputError, match="Years must be at least 1"):
             retirement_projection(years=0)
@@ -244,17 +216,11 @@ class TestMortgageAndAmortization:
         assert mortgage_payment(120000.0, 0.0, 10) == pytest.approx(1000.0)
 
     def test_mortgage_invalid_inputs(self):
-        with pytest.raises(
-            InvalidInputError, match="Loan principal must be strictly positive"
-        ):
+        with pytest.raises(InvalidInputError, match="Loan principal must be strictly positive"):
             mortgage_payment(0.0, 0.05, 30)
-        with pytest.raises(
-            InvalidInputError, match="Annual interest rate cannot be negative"
-        ):
+        with pytest.raises(InvalidInputError, match="Annual interest rate cannot be negative"):
             mortgage_payment(200000.0, -0.01, 30)
-        with pytest.raises(
-            InvalidInputError, match="Loan duration must be strictly positive"
-        ):
+        with pytest.raises(InvalidInputError, match="Loan duration must be strictly positive"):
             mortgage_payment(200000.0, 0.05, 0)
 
     def test_amortization_schedule_balances_to_zero(self):
@@ -269,23 +235,16 @@ class TestMortgageAndAmortization:
         assert total_principal_paid == pytest.approx(200000.0, abs=1e-4)
 
         # Total paid must equal principal + interest
-        assert sched.total_paid == pytest.approx(
-            sched.total_principal + sched.total_interest
-        )
+        assert sched.total_paid == pytest.approx(sched.total_principal + sched.total_interest)
 
     def test_amortization_with_extra_monthly_payment(self):
         # Adding $200/month extra payment saves interest and shortens payoff time
         regular = amortization_schedule(200000.0, 0.06, 30, extra_monthly_payment=0.0)
-        accelerated = amortization_schedule(
-            200000.0, 0.06, 30, extra_monthly_payment=200.0
-        )
+        accelerated = amortization_schedule(200000.0, 0.06, 30, extra_monthly_payment=200.0)
 
         assert accelerated.payoff_months < regular.payoff_months
         assert accelerated.total_interest < regular.total_interest
-        assert (
-            accelerated.months_saved
-            == regular.payoff_months - accelerated.payoff_months
-        )
+        assert accelerated.months_saved == regular.payoff_months - accelerated.payoff_months
         assert accelerated.interest_saved == pytest.approx(
             regular.total_interest - accelerated.total_interest
         )
@@ -309,9 +268,7 @@ class TestDoublingAndTargetTime:
 
     def test_doubling_time_rule_of_72(self):
         # 72 / 7 ~ 10.2857
-        assert doubling_time(0.07, method="rule_of_72") == pytest.approx(
-            72.0 / 7.0, rel=1e-9
-        )
+        assert doubling_time(0.07, method="rule_of_72") == pytest.approx(72.0 / 7.0, rel=1e-9)
 
     def test_doubling_time_invalid_rate(self):
         with pytest.raises(InvalidInputError, match="strictly positive"):
@@ -328,9 +285,7 @@ class TestDoublingAndTargetTime:
         assert time_to_reach_target(1000.0, 1000.0, 0.05) == 0.0
 
         # Target less than principal
-        with pytest.raises(
-            InvalidInputError, match="greater than or equal to principal"
-        ):
+        with pytest.raises(InvalidInputError, match="greater than or equal to principal"):
             time_to_reach_target(1000.0, 500.0, 0.05)
 
 

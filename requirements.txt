@@ -1,0 +1,8 @@
+# Production application dependencies
+streamlit>=1.42.0,<2.0.0
+plotly>=5.24.0
+pandas>=2.2.0
+
+# Testing and code quality
+pytest>=8.3.0
+ruff>=0.9.0

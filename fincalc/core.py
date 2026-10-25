@@ -333,9 +333,7 @@ def retirement_projection(
     if years < 1:
         raise InvalidInputError("Years must be at least 1.")
     if annual_contribution_increase < -1.0:
-        raise InvalidInputError(
-            "Annual contribution increase cannot be less than -100%."
-        )
+        raise InvalidInputError("Annual contribution increase cannot be less than -100%.")
 
     monthly_rate = annual_rate / 12.0
     current_balance = float(starting_balance)
@@ -625,9 +623,7 @@ def time_to_reach_target(
     if target == principal:
         return 0.0
     if annual_rate <= 0:
-        raise InvalidInputError(
-            "Annual rate must be strictly positive to grow to target."
-        )
+        raise InvalidInputError("Annual rate must be strictly positive to grow to target.")
 
     ratio = target / principal
     if continuous:
@@ -705,9 +701,7 @@ def solve_log(
         raise InvalidInputError("Cannot solve for base when exponent is 0.")
     calculated_base = math.pow(x, 1.0 / exponent)
     if math.isclose(calculated_base, 1.0) and not math.isclose(x, 1.0):
-        raise InvalidInputError(
-            "Resulting base is 1.0, which cannot produce a non-1 value."
-        )
+        raise InvalidInputError("Resulting base is 1.0, which cannot produce a non-1 value.")
     return calculated_base
 
 
@@ -803,9 +797,7 @@ def from_scientific(sci_str: str) -> float:
             exponent = int(exp_str)
             return mantissa * math.pow(10.0, exponent)
         except (ValueError, OverflowError) as err:
-            raise InvalidInputError(
-                f"Failed to parse numeric components of '{sci_str}'."
-            ) from err
+            raise InvalidInputError(f"Failed to parse numeric components of '{sci_str}'.") from err
 
     raise InvalidInputError(f"Cannot parse scientific notation string: '{sci_str}'")
 

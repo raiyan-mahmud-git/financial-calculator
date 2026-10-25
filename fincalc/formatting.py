@@ -50,10 +50,7 @@ def parse_rate(val: str | float) -> float:
         # If passed as an integer or float > 1, assume percent (e.g. 5 -> 5% -> 0.05)
         # unless it is 1.0 (which could be 100% or 1%). In financial contexts, 1.0 is treated as 100%
         # if explicitly entered as 1.0 in a percent field, but if > 1.0 it's definitely a percent.
-        if abs(num) > 1.0:
-            rate = num / 100.0
-        else:
-            rate = num
+        rate = num / 100.0 if abs(num) > 1.0 else num
     elif isinstance(val, str):
         clean = val.strip()
         if not clean:
@@ -65,21 +62,14 @@ def parse_rate(val: str | float) -> float:
         try:
             num = float(clean)
         except ValueError as err:
-            raise InvalidInputError(
-                f"Cannot parse rate '{val}' as a valid number."
-            ) from err
+            raise InvalidInputError(f"Cannot parse rate '{val}' as a valid number.") from err
 
-        if has_percent or abs(num) > 1.0:
-            rate = num / 100.0
-        else:
-            rate = num
+        rate = num / 100.0 if has_percent or abs(num) > 1.0 else num
     else:
         raise InvalidInputError(f"Unsupported type for rate: {type(val).__name__}")
 
     if rate < -1.0:
-        raise InvalidInputError(
-            f"Rate cannot be less than -100% (got {rate * 100:.2f}%)."
-        )
+        raise InvalidInputError(f"Rate cannot be less than -100% (got {rate * 100:.2f}%).")
     if rate > 100.0:
         raise InvalidInputError(f"Rate cannot exceed 10,000% (got {rate * 100:.2f}%).")
 
@@ -101,10 +91,7 @@ def format_currency(amount: float, currency: str = "USD", decimals: int = 2) -> 
     is_neg = amount < 0
     abs_amt = abs(amount)
 
-    if decimals == 0:
-        formatted_num = f"{abs_amt:,.0f}"
-    else:
-        formatted_num = f"{abs_amt:,.{decimals}f}"
+    formatted_num = f"{abs_amt:,.0f}" if decimals == 0 else f"{abs_amt:,.{decimals}f}"
 
     if is_neg:
         return f"-{sym}{formatted_num}"
