@@ -1,6 +1,5 @@
 """Financial Calculator - Streamlit Web Application Entrypoint.
 
-Provides multipage navigation, shared sidebar configuration, and app initialization.
 """
 
 from __future__ import annotations
@@ -19,7 +18,7 @@ st.set_page_config(
 
 init_session_state()
 
-# Navigation setup using modern Streamlit Page routing
+# Navigation setup
 pages = {
     "Overview": [
         st.Page("views/home.py", title="Home", icon="🏠", default=True),
@@ -37,7 +36,7 @@ pages = {
 
 pg = st.navigation(pages)
 
-# Global sidebar settings
+# Global sidebar
 with st.sidebar:
     st.markdown("### ⚙️ Settings & Options")
     render_sidebar_currency_selector()

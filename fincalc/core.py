@@ -1,10 +1,5 @@
 """Core financial and mathematical computation library.
 
-This module provides pure, deterministic, and typed functions for all calculations.
-It contains NO dependencies on UI frameworks (such as Streamlit) to enable comprehensive
-automated unit testing and headless execution.
-
-All functions keep full floating-point precision; rounding should occur only at display time.
 """
 
 from __future__ import annotations

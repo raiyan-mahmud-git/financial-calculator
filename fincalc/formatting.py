@@ -1,7 +1,5 @@
 """Formatting and input parsing utilities for financial and mathematical values.
 
-This module provides robust parsing for rates (e.g., '5%', '5', 0.05) and clean
-string formatters for multi-currency figures, percentages, and scientific numbers.
 """
 
 from __future__ import annotations
