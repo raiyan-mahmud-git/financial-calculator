@@ -45,9 +45,7 @@ def parse_rate(val: str | float) -> float:
 
     if isinstance(val, (int, float)):
         num = float(val)
-        # If passed as an integer or float > 1, assume percent (e.g. 5 -> 5% -> 0.05)
-        # unless it is 1.0 (which could be 100% or 1%). In financial contexts, 1.0 is treated as 100%
-        # if explicitly entered as 1.0 in a percent field, but if > 1.0 it's definitely a percent.
+        
         rate = num / 100.0 if abs(num) > 1.0 else num
     elif isinstance(val, str):
         clean = val.strip()

@@ -15,7 +15,7 @@ class TestStreamlitApp:
         at = AppTest.from_file(str(ROOT_DIR / "app.py"), default_timeout=10)
         at.run()
         assert not at.exception
-        # Home page title should be rendered
+        # Home page title
         assert len(at.title) >= 1
         assert "Financial" in at.title[0].value
 
@@ -72,8 +72,8 @@ class TestStreamlitApp:
         assert not at.exception
         assert len(at.metric) == 3
 
-        # Simulate invalid input: negative hydrogen concentration
+        # Simulate invalid input
         at.text_input(key="ph_text_box").input("-0.05").run()
         assert not at.exception
-        # Error alert should be displayed for negative concentration
+        # Error alert
         assert len(at.error) >= 1
