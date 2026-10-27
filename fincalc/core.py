@@ -1,6 +1,4 @@
-"""Core financial and mathematical computation library.
-
-"""
+"""Core financial and mathematical computation library."""
 
 from __future__ import annotations
 

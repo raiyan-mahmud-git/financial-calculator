@@ -1,6 +1,4 @@
-"""Financial Calculator - Streamlit Web Application Entrypoint.
-
-"""
+"""Financial Calculator - Streamlit Web Application Entrypoint."""
 
 from __future__ import annotations
 

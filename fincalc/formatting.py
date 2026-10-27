@@ -1,6 +1,4 @@
-"""Formatting and input parsing utilities for financial and mathematical values.
-
-"""
+"""Formatting and input parsing utilities for financial and mathematical values."""
 
 from __future__ import annotations
 
@@ -45,7 +43,7 @@ def parse_rate(val: str | float) -> float:
 
     if isinstance(val, (int, float)):
         num = float(val)
-        
+
         rate = num / 100.0 if abs(num) > 1.0 else num
     elif isinstance(val, str):
         clean = val.strip()
